@@ -419,18 +419,49 @@ class _AuthenticationState extends State<Authentication> {
                 child: const Text('Kayıt Ol'),
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.only(bottom: 25),
+            //   child: ElevatedButton.icon(
+            //     icon: ImageIcon(
+            //       AssetImage(
+            //           "assets/images/btn_google_light_focus_xxxhdpi.9.png"),
+            //       color: Color(0xff4285F4),
+            //       size: 24,
+            //     ),
+            //     label: Text('Sign in with Google'),
+            //     onPressed: () {
+            //       signInWithGoogle();
+            //     },
+            //   ),
+            // ),
             Padding(
-              padding: EdgeInsets.only(bottom: 25),
-              child: ElevatedButton.icon(
-                icon: ImageIcon(
-                  AssetImage("assets/images/pp.jpg"),
-                  color: Colors.red,
-                  size: 24,
-                ),
-                label: Text('Delete Now'),
+              padding: const EdgeInsets.only(
+                  left: 0.0, right: 0.0, top: 30.0, bottom: 0.0),
+              child: new RaisedButton(
+                elevation: 0.0,
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(1.0)),
+                padding: EdgeInsets.only(
+                    top: 7.0, bottom: 7.0, right: 40.0, left: 7.0),
                 onPressed: () {
-                  print('Pressed');
+                  signInWithGoogle();
                 },
+                child: new Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    new Image.asset(
+                        'assets/images/btn_google_light_focus_xxxhdpi.9.png',
+                        height: 40.0,
+                        width: 40.0),
+                    Padding(
+                        padding: EdgeInsets.only(left: 10.0),
+                        child: new Text(
+                          "Sign in with Google ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15.0),
+                        ))
+                  ],
+                ),
               ),
             ),
           ],
