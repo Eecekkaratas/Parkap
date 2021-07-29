@@ -421,12 +421,16 @@ class _AuthenticationState extends State<Authentication> {
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 25),
-              child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+              child: ElevatedButton.icon(
+                icon: ImageIcon(
+                  AssetImage("assets/images/pp.jpg"),
+                  color: Colors.red,
+                  size: 24,
+                ),
+                label: Text('Delete Now'),
                 onPressed: () {
-                  signInWithGoogle();
+                  print('Pressed');
                 },
-                child: const Text('Google'),
               ),
             ),
           ],
