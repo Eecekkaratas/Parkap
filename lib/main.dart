@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(ParkApp());
 }
 
@@ -175,7 +179,7 @@ class ParkApp extends StatelessWidget {
           primarySwatch: Colors.red,
           canvasColor: Colors.white,
         ),
-        home: FirstRoute());
+        home: Authentication());
   }
 }
 
@@ -276,6 +280,158 @@ class FirstRoute extends StatelessWidget {
     );
   }
 }
+class Authentication extends StatefulWidget {
+  Authentication({Key key}) : super(key: key);
+
+  @override
+  _AuthenticationState createState() => _AuthenticationState();
+}
+
+class _AuthenticationState extends State<Authentication> {
+  TextEditingController _emailField = TextEditingController();
+  TextEditingController _passwordField = TextEditingController();
+
+  Future<void> _showMyDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Hata'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: const <Widget>[
+              Text('Lütfen Bilgilerinizi Kontrol Edin'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Tamam'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );}
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text("ParKap", textAlign: TextAlign.center),
+      //   automaticallyImplyLeading: false,
+      // ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Center(
+            //       child: Image.asset(
+            //         "assets/images/logo.png",
+            //         height: 130,
+            //         width: 130,
+            //       )),
+            Padding(
+                padding: EdgeInsets.only(bottom: 15),
+                child: Image.asset(
+                  "assets/images/logo.png",
+                  height: 160,
+                  width: 160,
+                )),
+
+            Padding(
+              padding: EdgeInsets.only(bottom: 25, top: 25),
+              child: Text(
+                "Parkap'a Hoşgeldiniz",
+                style: new TextStyle(
+                  fontSize: 30.0,
+                  //color: Colors.yellow,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 25, top: 25),
+              child: Container(
+                child: TextFormField(
+                  controller: _emailField,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      //labelText: 'Email',
+                      hintText: 'Email:'),
+                ),
+                width: 320,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 25),
+              child: Container(
+                child: TextFormField(
+                  controller: _passwordField,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      //labelText: 'Email',
+                      hintText: 'Şifre:'),
+                ),
+                width: 320,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 25),
+              child: ElevatedButton(
+                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+                onPressed: () async {
+                  bool shouldNavigate =
+                        await signIn(_emailField.text, _passwordField.text);
+                    if (shouldNavigate) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyApp(),
+                        ),
+                      );
+                    } else{_showMyDialog();}
+                },
+                child: const Text('Giriş'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 25),
+              child: ElevatedButton(
+                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondRoute()),
+                  );
+                },
+                child: const Text('Kayıt Ol'),
+              ),
+            ),
+                        Padding(
+              padding: EdgeInsets.only(bottom: 25),
+              child: ElevatedButton(
+                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+                onPressed: () {
+                  signInWithGoogle();
+                },
+                child: const Text('Google'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class SecondRoute extends StatelessWidget {
   @override

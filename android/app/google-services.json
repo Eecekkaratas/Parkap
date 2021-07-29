@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "966516870601",
+    "project_id": "parkapd1",
+    "storage_bucket": "parkapd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966516870601:android:2b1a20b26dd9038685ec18",
+        "android_client_info": {
+          "package_name": "com.example.app_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966516870601-qfe3tggpvpe4m8hvgds97buvk1qfnmu1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_flutter",
+            "certificate_hash": "0d2cd2847eda94ebc9258322d0530095c5f79d2e"
+          }
+        },
+        {
+          "client_id": "966516870601-n1ke8eoc01fadvig3evq278q9osqf1ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8ZVXayZnocp9KquZ5aVAAYW2nsrYzgkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966516870601-n1ke8eoc01fadvig3evq278q9osqf1ks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966516870601:android:41c940173afc3f1385ec18",
+        "android_client_info": {
+          "package_name": "com.parkap.parkap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966516870601-n1ke8eoc01fadvig3evq278q9osqf1ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8ZVXayZnocp9KquZ5aVAAYW2nsrYzgkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966516870601-n1ke8eoc01fadvig3evq278q9osqf1ks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
