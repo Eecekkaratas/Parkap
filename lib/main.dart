@@ -1,5 +1,5 @@
 import 'dart:io';
-
+//deneme
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -280,6 +280,7 @@ class FirstRoute extends StatelessWidget {
     );
   }
 }
+
 class Authentication extends StatefulWidget {
   Authentication({Key key}) : super(key: key);
 
@@ -292,30 +293,31 @@ class _AuthenticationState extends State<Authentication> {
   TextEditingController _passwordField = TextEditingController();
 
   Future<void> _showMyDialog() async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Hata'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: const <Widget>[
-              Text('Lütfen Bilgilerinizi Kontrol Edin'),
-            ],
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Hata'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Lütfen Bilgilerinizi Kontrol Edin'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Tamam'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );}
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Tamam'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -389,15 +391,17 @@ class _AuthenticationState extends State<Authentication> {
                 //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
                 onPressed: () async {
                   bool shouldNavigate =
-                        await signIn(_emailField.text, _passwordField.text);
-                    if (shouldNavigate) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyApp(),
-                        ),
-                      );
-                    } else{_showMyDialog();}
+                      await signIn(_emailField.text, _passwordField.text);
+                  if (shouldNavigate) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyApp(),
+                      ),
+                    );
+                  } else {
+                    _showMyDialog();
+                  }
                 },
                 child: const Text('Giriş'),
               ),
@@ -415,7 +419,7 @@ class _AuthenticationState extends State<Authentication> {
                 child: const Text('Kayıt Ol'),
               ),
             ),
-                        Padding(
+            Padding(
               padding: EdgeInsets.only(bottom: 25),
               child: ElevatedButton(
                 //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
@@ -431,7 +435,6 @@ class _AuthenticationState extends State<Authentication> {
     );
   }
 }
-
 
 class SecondRoute extends StatelessWidget {
   @override
