@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -224,6 +225,7 @@ class _AuthenticationState extends State<Authentication> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, //sarı-siyah hatası
       // appBar: AppBar(
       //   title: Text("ParKap", textAlign: TextAlign.center),
       //   automaticallyImplyLeading: false,
