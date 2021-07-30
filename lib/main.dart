@@ -388,7 +388,8 @@ class _AuthenticationState extends State<Authentication> {
             Padding(
               padding: EdgeInsets.only(bottom: 25),
               child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+                style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(fontSize: 20)),
                 onPressed: () async {
                   bool shouldNavigate =
                       await signIn(_emailField.text, _passwordField.text);
@@ -407,9 +408,10 @@ class _AuthenticationState extends State<Authentication> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 25),
+              padding: EdgeInsets.only(bottom: 15),
               child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+                style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(fontSize: 20)),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -436,13 +438,14 @@ class _AuthenticationState extends State<Authentication> {
             // ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 0.0, right: 0.0, top: 30.0, bottom: 0.0),
+                  left: 0.0, right: 0.0, top: 20.0, bottom: 0.0),
               child: new RaisedButton(
+                color: Color(0xff4285F4),
                 elevation: 0.0,
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(1.0)),
                 padding: EdgeInsets.only(
-                    top: 7.0, bottom: 7.0, right: 40.0, left: 7.0),
+                    top: 5.0, bottom: 5.0, right: 30.0, left: 5.0),
                 onPressed: () {
                   signInWithGoogle();
                 },
@@ -458,7 +461,9 @@ class _AuthenticationState extends State<Authentication> {
                         child: new Text(
                           "Sign in with Google ",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15.0),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0,
+                              color: Colors.white),
                         ))
                   ],
                 ),
