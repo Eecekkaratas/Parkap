@@ -6,9 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -295,18 +293,25 @@ class _AuthenticationState extends State<Authentication> {
                 style: ElevatedButton.styleFrom(
                     textStyle: TextStyle(fontSize: 20)),
                 onPressed: () async {
-                  bool shouldNavigate =
-                      await signIn(_emailField.text, _passwordField.text);
-                  if (shouldNavigate) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyApp(),
-                      ),
-                    );
-                  } else {
-                    _showMyDialog();
-                  }
+                  // bool shouldNavigate =
+                  //     await signIn(_emailField.text, _passwordField.text);
+                  // if (shouldNavigate) {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => MyApp(),
+                  //     ),
+                  //   );
+                  // } else {
+                  //   _showMyDialog();
+                  // }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(),
+                    ),
+                  );
+                  //TODO değiştir
                 },
                 child: const Text('Giriş'),
               ),
@@ -381,8 +386,16 @@ class _AuthenticationState extends State<Authentication> {
 }
 
 class Register extends StatefulWidget {
+  static final String title = 'Dropdown Button';
   @override
   _RegisterState createState() => _RegisterState();
+}
+
+class NewObject {
+  final String title;
+  final IconData icon;
+
+  NewObject(this.title, this.icon);
 }
 
 class _RegisterState extends State<Register> {
@@ -392,6 +405,15 @@ class _RegisterState extends State<Register> {
   TextEditingController _usernameField = TextEditingController();
   TextEditingController _telField = TextEditingController();
   @override
+  static final List<NewObject> items = <NewObject>[
+    NewObject('İstanbul', Icons.home_work_outlined),
+    NewObject('Ankara', Icons.home_work_outlined),
+    NewObject('İzmir', Icons.home_work_outlined),
+    NewObject('Antalya', Icons.home_work_outlined),
+  ];
+
+  NewObject value = items.first;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -464,18 +486,19 @@ class _RegisterState extends State<Register> {
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 25),
-              child: Container(
-                child: TextField(
-                  controller: _cityField,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0))),
-                      //labelText: 'Email',
-                      hintText: 'Şehir:'),
-                ),
-                width: 320,
-              ),
+              child: buildDropdown(),
+              // child: Container(
+              //   child: TextField(
+              //     controller: _cityField,
+              //     decoration: InputDecoration(
+              //         border: OutlineInputBorder(
+              //             borderRadius:
+              //                 BorderRadius.all(Radius.circular(15.0))),
+              //         //labelText: 'Email',
+              //         hintText: 'Şehir:'),
+              //   ),
+              //   width: 320,
+              // ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -483,24 +506,61 @@ class _RegisterState extends State<Register> {
                     _emailField.text,
                     _passwordField.text,
                     _telField.text,
-                    _cityField.text,
+                    value.title,
                     _usernameField.text);
                 if (shouldNavigate) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Authentication(),
+                      builder: (context) => MyApp(),
                     ),
                   );
                 }
               },
-              child: Text('Adam Ol'),
+              child: Text('Kayıt Ol'),
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget buildDropdown() => Container(
+        width: 320,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(
+              color: Color(0xffb9b9b9), width: 1), //color: Color(0xff4285F4),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<NewObject>(
+            value: value, // currently selected item
+            items: items
+                .map((item) => DropdownMenuItem<NewObject>(
+                      child: Row(
+                        children: [
+                          Icon(item.icon),
+                          const SizedBox(width: 8),
+                          Text(
+                            item.title,
+                            style: TextStyle(
+                              // fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      value: item,
+                    ))
+                .toList(),
+            onChanged: (value) => setState(() {
+              this.value = value;
+            }),
+          ),
+        ),
+      );
 }
 // class SecondRoute extends StatelessWidget {
 //   @override
