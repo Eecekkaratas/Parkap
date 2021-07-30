@@ -156,7 +156,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => FirstRoute()),
+                    MaterialPageRoute(builder: (context) => Authentication()),
                   );
                 },
                 child: Text('Çıkış'),
@@ -180,104 +180,6 @@ class ParkApp extends StatelessWidget {
           canvasColor: Colors.white,
         ),
         home: Authentication());
-  }
-}
-
-class FirstRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("ParKap", textAlign: TextAlign.center),
-      //   automaticallyImplyLeading: false,
-      // ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Center(
-            //       child: Image.asset(
-            //         "assets/images/logo.png",
-            //         height: 130,
-            //         width: 130,
-            //       )),
-            Padding(
-                padding: EdgeInsets.only(bottom: 15),
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 160,
-                  width: 160,
-                )),
-
-            Padding(
-              padding: EdgeInsets.only(bottom: 25, top: 25),
-              child: Text(
-                "Parkap'a Hoşgeldiniz",
-                style: new TextStyle(
-                  fontSize: 30.0,
-                  //color: Colors.yellow,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 25, top: 25),
-              child: Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0))),
-                      //labelText: 'Email',
-                      hintText: 'Email:'),
-                ),
-                width: 320,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 25),
-              child: Container(
-                child: TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0))),
-                      //labelText: 'Email',
-                      hintText: 'Şifre:'),
-                ),
-                width: 320,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 25),
-              child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
-                },
-                child: const Text('Giriş'),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 25),
-              child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SecondRoute()),
-                  );
-                },
-                child: const Text('Kayıt Ol'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -415,7 +317,7 @@ class _AuthenticationState extends State<Authentication> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SecondRoute()),
+                    MaterialPageRoute(builder: (context) => Register()),
                   );
                 },
                 child: const Text('Kayıt Ol'),
@@ -476,7 +378,17 @@ class _AuthenticationState extends State<Authentication> {
   }
 }
 
-class SecondRoute extends StatelessWidget {
+class Register extends StatefulWidget {
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  TextEditingController _emailField = TextEditingController();
+  TextEditingController _passwordField = TextEditingController();
+  TextEditingController _cityField = TextEditingController();
+  TextEditingController _usernameField = TextEditingController();
+  TextEditingController _telField = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -491,6 +403,7 @@ class SecondRoute extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 25),
               child: Container(
                 child: TextField(
+                  controller: _emailField,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius:
@@ -505,6 +418,7 @@ class SecondRoute extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 25),
               child: Container(
                 child: TextField(
+                  controller: _usernameField,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius:
@@ -519,6 +433,7 @@ class SecondRoute extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 25),
               child: Container(
                 child: TextField(
+                  controller: _passwordField,
                   obscureText: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -534,6 +449,7 @@ class SecondRoute extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 25),
               child: Container(
                 child: TextField(
+                  controller: _telField,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius:
@@ -548,6 +464,7 @@ class SecondRoute extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 25),
               child: Container(
                 child: TextField(
+                  controller: _cityField,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius:
@@ -559,11 +476,21 @@ class SecondRoute extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => FirstRoute()),
-                );
+              onPressed: () async {
+                bool shouldNavigate = await register(
+                    _emailField.text,
+                    _passwordField.text,
+                    _telField.text,
+                    _cityField.text,
+                    _usernameField.text);
+                if (shouldNavigate) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Authentication(),
+                    ),
+                  );
+                }
               },
               child: Text('Adam Ol'),
             ),
@@ -573,6 +500,118 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+// class SecondRoute extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("Kayıt Ol"),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Padding(
+//               padding: EdgeInsets.only(bottom: 25),
+//               child: Container(
+//                 child: TextField(
+//                   controller: _emailField,
+//                   decoration: InputDecoration(
+//                       border: OutlineInputBorder(
+//                           borderRadius:
+//                               BorderRadius.all(Radius.circular(15.0))),
+//                       //labelText: 'Email',
+//                       hintText: 'Email:'),
+//                 ),
+//                 width: 320,
+//               ),
+//             ),
+//             Padding(
+//               padding: EdgeInsets.only(bottom: 25),
+//               child: Container(
+//                 child: TextField(
+//                   controller: _usernameField,
+//                   decoration: InputDecoration(
+//                       border: OutlineInputBorder(
+//                           borderRadius:
+//                               BorderRadius.all(Radius.circular(15.0))),
+//                       //labelText: 'Email',
+//                       hintText: 'Kullanıcı Adı:'),
+//                 ),
+//                 width: 320,
+//               ),
+//             ),
+//             Padding(
+//               padding: EdgeInsets.only(bottom: 25),
+//               child: Container(
+//                 child: TextField(
+//                   controller: _passwordField,
+//                   obscureText: true,
+//                   decoration: InputDecoration(
+//                       border: OutlineInputBorder(
+//                           borderRadius:
+//                               BorderRadius.all(Radius.circular(15.0))),
+//                       //labelText: 'Email',
+//                       hintText: 'Şifre:'),
+//                 ),
+//                 width: 320,
+//               ),
+//             ),
+//             Padding(
+//               padding: EdgeInsets.only(bottom: 25),
+//               child: Container(
+//                 child: TextField(
+//                   controller: _telField,
+//                   decoration: InputDecoration(
+//                       border: OutlineInputBorder(
+//                           borderRadius:
+//                               BorderRadius.all(Radius.circular(15.0))),
+//                       //labelText: 'Email',
+//                       hintText: 'Telefon Numarası:'),
+//                 ),
+//                 width: 320,
+//               ),
+//             ),
+//             Padding(
+//               padding: EdgeInsets.only(bottom: 25),
+//               child: Container(
+//                 child: TextField(
+//                   controller: _cityField,
+//                   decoration: InputDecoration(
+//                       border: OutlineInputBorder(
+//                           borderRadius:
+//                               BorderRadius.all(Radius.circular(15.0))),
+//                       //labelText: 'Email',
+//                       hintText: 'Şehir:'),
+//                 ),
+//                 width: 320,
+//               ),
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 bool shouldNavigate = await register(
+//                     _emailField.text,
+//                     _passwordField.text,
+//                     _telField.text,
+//                     _cityField.text,
+//                     _usernameField.text);
+//                 if (shouldNavigate) {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => FirstRoute(),
+//                     ),
+//                   );
+//                 }
+//               },
+//               child: Text('Adam Ol'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class Anasayfa extends StatelessWidget {
   @override
@@ -592,7 +631,7 @@ class Anasayfa extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => FirstRoute()),
+                    MaterialPageRoute(builder: (context) => Authentication()),
                   );
                 },
                 child: const Text('HARİTA EKLENECEK'),
@@ -653,7 +692,7 @@ class Anasayfa extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.directions_car_outlined),
-                title: Text('Otopark'),
+                title: Text('Otopark Listesi'),
               ),
               ListTile(
                 leading: Icon(Icons.settings),
@@ -679,7 +718,7 @@ class Anasayfa extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => FirstRoute()),
+                    MaterialPageRoute(builder: (context) => Authentication()),
                   );
                 },
                 child: Text('Çıkış'),
@@ -750,7 +789,7 @@ class Ayarlar extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.directions_car_outlined),
-              title: Text('Otopark'),
+              title: Text('Otopark Listesi'),
             ),
             ListTile(
               leading: Icon(Icons.settings),
@@ -776,7 +815,7 @@ class Ayarlar extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => FirstRoute()),
+                  MaterialPageRoute(builder: (context) => Authentication()),
                 );
               },
               child: Text('Çıkış'),
