@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 Future<bool> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
@@ -31,14 +30,16 @@ Future<UserCredential> signInWithGoogle() async {
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 
-Future<bool> register(String email, String password, String tel, String city, String username) async {
+Future<bool> register(String email, String password, String tel, String city,
+    String username) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
+    var user = FirebaseAuth.instance.currentUser;
+    user.sendEmailVerification();
     String uid = FirebaseAuth.instance.currentUser.uid;
-    CollectionReference ref = FirebaseFirestore.instance
-        .collection('users');
-        var myJSONObj = {
+    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    var myJSONObj = {
       "city": city,
       "username": username,
       "tel": tel,

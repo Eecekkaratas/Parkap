@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   String _locationMessage = "";
   LatLng _pos;
 
-  Future<LatLng> _getCurrentLocation() async {
+  void _getCurrentLocation() async {
     final position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(position);
@@ -293,24 +293,24 @@ class _AuthenticationState extends State<Authentication> {
                 style: ElevatedButton.styleFrom(
                     textStyle: TextStyle(fontSize: 20)),
                 onPressed: () async {
-                  // bool shouldNavigate =
-                  //     await signIn(_emailField.text, _passwordField.text);
-                  // if (shouldNavigate) {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => MyApp(),
-                  //     ),
-                  //   );
-                  // } else {
-                  //   _showMyDialog();
-                  // }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyApp(),
-                    ),
-                  );
+                  bool shouldNavigate =
+                      await signIn(_emailField.text, _passwordField.text);
+                  if (shouldNavigate) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyApp(),
+                      ),
+                    );
+                  } else {
+                    _showMyDialog();
+                  }
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => MyApp(),
+                  //   ),
+                  // );
                   //TODO değiştir
                 },
                 child: const Text('Giriş'),
