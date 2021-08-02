@@ -7,6 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _locationMessage = "";
   LatLng _pos;
+  var username = "adam ol";
 
   void _getCurrentLocation() async {
     final position = await Geolocator()
@@ -32,6 +35,17 @@ class _MyAppState extends State<MyApp> {
       _locationMessage = "${position.latitude}, ${position.longitude}";
       _pos = LatLng(position.latitude, position.longitude);
       debugPrint("sa");
+      var firebaseUser = FirebaseAuth.instance.currentUser;
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .get()
+          .then((value) {
+        print("BAK");
+        print(firebaseUser.uid);
+        print(value.data());
+        username = value.data()["username"];
+      });
     });
   }
 
@@ -68,6 +82,24 @@ class _MyAppState extends State<MyApp> {
           title: Text('Maps '),
           backgroundColor: Colors.red[700],
         ),
+        floatingActionButton: new FloatingActionButton(
+          onPressed: () {
+            // Add your onPressed code here!
+          },
+          child: Icon(Icons.filter_alt_outlined),
+          backgroundColor: Colors.green,
+        ),
+
+        //  body: GoogleMap(
+        //     onMapCreated: _onMapCreated,
+        //     initialCameraPosition: CameraPosition(
+        //       target: _pos,
+        //       zoom: 20.0,
+        //     ),
+        //     markers: _markers.values.toSet(),
+        //  ),
+        //DEĞİŞTİRİLMEZ
+
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
@@ -76,6 +108,7 @@ class _MyAppState extends State<MyApp> {
           ),
           markers: _markers.values.toSet(),
         ),
+
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -87,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Onur Sertgil',
+                        username,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -767,7 +800,7 @@ class Anasayfa extends StatelessWidget {
                 },
               ),
               Padding(
-                padding: EdgeInsets.only(top: 295),
+                padding: EdgeInsets.only(top: 255),
                 child: Text(
                   "",
                   style: new TextStyle(
