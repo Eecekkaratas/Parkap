@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,6 +10,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+//import 'package:flutter_listtile_demo/model/listtilemodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +30,161 @@ class _MyAppState extends State<MyApp> {
   String _locationMessage = "";
   LatLng _pos;
   var username = "adam ol";
+  var uuid = Uuid();
+  final Map<String, Marker> _markers = {};
+  bool value = false;
+
+  get actions => null;
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Filtrele'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              //   children: const <Widget>[
+              //     //Text('This is a demo alert dialog.'),
+              //     Expanded(child: Text("F1")),
+              //     // Checkbox(
+              //     //   value: false,
+              //     // ),
+              children: [
+                CheckboxListTile(
+                  title: const Text('Fiyata Göre'),
+                  //subtitle: const Text('A computer science portal for geeks.'),
+                  //secondary: const Icon(Icons.code),
+                  autofocus: false,
+                  activeColor: Colors.green,
+                  checkColor: Colors.white,
+                  selected: value,
+                  value: value,
+                  onChanged: (bool value) {
+                    setState(() {
+                      value = value;
+                    });
+                  },
+
+                  //Text('Would you like to approve of this message?'),
+                  //],*******
+                  // actions: <Widget>[
+                  //   TextButton(
+                  //     child: const Text('Filtrele'),
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //       //Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  // ],
+                ),
+                CheckboxListTile(
+                  title: const Text('Mesafeye Göre'),
+                  //subtitle: const Text('A computer science portal for geeks.'),
+                  //secondary: const Icon(Icons.code),
+                  autofocus: false,
+                  activeColor: Colors.green,
+                  checkColor: Colors.white,
+                  selected: value,
+                  value: value,
+                  onChanged: (bool value) {
+                    setState(() {
+                      value = value;
+                    });
+                  },
+
+                  //Text('Would you like to approve of this message?'),
+                  //],*******
+                  // actions: <Widget>[
+                  //   TextButton(
+                  //     child: const Text('Filtrele'),
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //       //Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  // ],
+                ),
+                CheckboxListTile(
+                  title: const Text('Boş Park Sayısına Göre'),
+                  //subtitle: const Text('A computer science portal for geeks.'),
+                  //secondary: const Icon(Icons.code),
+                  autofocus: false,
+                  activeColor: Colors.green,
+                  checkColor: Colors.white,
+                  selected: value,
+                  value: value,
+                  onChanged: (bool value) {
+                    setState(() {
+                      value = value;
+                    });
+                  },
+
+                  //Text('Would you like to approve of this message?'),
+                  //],*******
+                  // actions: <Widget>[
+                  //   TextButton(
+                  //     child: const Text('Filtrele'),
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //       //Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  // ],
+                ),
+                FlutterSwitch(
+                  width: 125.0,
+                  height: 55.0,
+                  valueFontSize: 25.0,
+                  toggleSize: 45.0,
+                  value: false,
+                  borderRadius: 30.0,
+                  padding: 8.0,
+                  showOnOff: true,
+                  //onToggle: (val) {
+                  //setState(() {
+                  //  status = val;
+                  // });
+                  //},
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  //       actions:
+  //       <Widget>[
+  //         TextButton(
+  //           child: const Text('Filtrele'),
+  //           onPressed: () {
+  //             Navigator.pop(context);
+  //             //Navigator.of(context).pop();
+  //           },
+  //         ),
+  //       ];
+  //       //);
+  //     },
+  //   );
+  // }
+
+  void _setMarker() async {
+    final position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      final marker = Marker(
+        markerId: MarkerId("Limon Otopark"),
+        position: LatLng(position.latitude, position.longitude),
+        infoWindow: InfoWindow(
+          title: "Limon Otopark",
+          snippet: "Sa2",
+        ),
+      );
+      _markers["sa"] = marker;
+    });
+  }
 
   void _getCurrentLocation() async {
     final position = await Geolocator()
@@ -35,42 +195,52 @@ class _MyAppState extends State<MyApp> {
       _locationMessage = "${position.latitude}, ${position.longitude}";
       _pos = LatLng(position.latitude, position.longitude);
       debugPrint("sa");
-      var firebaseUser = FirebaseAuth.instance.currentUser;
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(firebaseUser.uid)
-          .get()
-          .then((value) {
-        print("BAK");
-        print(firebaseUser.uid);
-        print(value.data());
-        username = value.data()["username"];
-      });
+      // var firebaseUser = FirebaseAuth.instance.currentUser;
+
+      // FirebaseFirestore.instance
+      //     .collection("users")
+      //     .doc(firebaseUser.uid)
+      //     .get()
+      //     .then((value) {
+      //   print("BAK");
+      //   print(value.data());
+      //   username = value.data()["username"];
+      // });
     });
   }
 
   @override
   void initState() {
+    _getCurrentLocation();
     super.initState();
-    _getCurrentLocation(); //running initialisation code; getting prefs etc.
   }
 
-  final Map<String, Marker> _markers = {};
   Future<void> _onMapCreated(GoogleMapController controller) async {
     final position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _markers.clear();
-      final marker = Marker(
-        markerId: MarkerId("Limon Otopark"),
-        position: LatLng(position.latitude, position.longitude),
-        infoWindow: InfoWindow(
-          title: "Limon Otopark",
-          snippet: "Sa",
-        ),
-      );
-      _markers["sa"] = marker;
-      _pos = LatLng(position.latitude, position.longitude);
+      FirebaseFirestore.instance.collection("parks").get().then((value) {
+        print("BAK");
+
+        final allData = value.docs.map((doc) => doc.data()).toList();
+        print(allData);
+        for (var data in allData) {
+          var uid = uuid.v1();
+          print(uid);
+          _markers[uid] = Marker(
+            markerId: MarkerId(uid),
+            position:
+                LatLng(double.parse(data["lat"]), double.parse(data["long"])),
+            infoWindow: InfoWindow(
+              title: "Limon Otopark",
+              snippet: "Sa",
+            ),
+          );
+        }
+      });
+
+      // _pos = LatLng(position.latitude, position.longitude);
     });
   }
 
@@ -82,12 +252,27 @@ class _MyAppState extends State<MyApp> {
           title: Text('Maps '),
           backgroundColor: Colors.red[700],
         ),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: () {
-            // Add your onPressed code here!
-          },
-          child: Icon(Icons.filter_alt_outlined),
-          backgroundColor: Colors.green,
+        floatingActionButton: Row(
+          //mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+
+          children: [
+            new FloatingActionButton(
+              onPressed: () {
+                _showMyDialog();
+              },
+              child: Icon(Icons.filter_alt_outlined),
+              backgroundColor: Colors.green,
+            ),
+            new FloatingActionButton(
+              onPressed: () {
+                //KİŞİ GİRİŞİ
+                _setMarker();
+              },
+              child: Icon(Icons.add_circle_outline_outlined),
+              backgroundColor: Colors.redAccent[700],
+            )
+          ],
         ),
 
         //  body: GoogleMap(
@@ -165,6 +350,10 @@ class _MyAppState extends State<MyApp> {
                 title: Text('Otopark Listesi'),
               ),
               ListTile(
+                leading: Icon(Icons.trending_up_outlined),
+                title: Text('Seviye'),
+              ),
+              ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('Ayarlar'),
                 onTap: () {
@@ -199,6 +388,8 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
+  void onChanged(bool newValue) {}
 }
 
 class ParkApp extends StatelessWidget {
@@ -236,7 +427,7 @@ class _AuthenticationState extends State<Authentication> {
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
-                Text('Lütfen Bilgilerinizi Kontrol Edin'),
+                Text('Bilgilerinizi kontrol ediniz !'),
               ],
             ),
           ),
@@ -449,6 +640,7 @@ class _RegisterState extends State<Register> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Kayıt Ol"),
       ),
@@ -790,6 +982,10 @@ class Anasayfa extends StatelessWidget {
                 title: Text('Otopark Listesi'),
               ),
               ListTile(
+                leading: Icon(Icons.trending_up_outlined),
+                title: Text('Seviye'),
+              ),
+              ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('Ayarlar'),
                 onTap: () {
@@ -885,6 +1081,10 @@ class Ayarlar extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.directions_car_outlined),
               title: Text('Otopark Listesi'),
+            ),
+            ListTile(
+              leading: Icon(Icons.trending_up_outlined),
+              title: Text('Seviye'),
             ),
             ListTile(
               leading: Icon(Icons.settings),
