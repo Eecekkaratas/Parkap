@@ -59,6 +59,7 @@ flutter:
     - assets/images/logo.png
     - assets/images/pp.jpg
     - assets/images/btn_google_light_focus_xxxhdpi.9.png
+    - assets/images/my_icon.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

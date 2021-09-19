@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +14,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 //import 'package:flutter_listtile_demo/model/listtilemodel.dart';
+
+Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+      .buffer
+      .asUint8List();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +46,7 @@ class _MyAppState extends State<MyApp> {
   var uuid = Uuid();
   final Map<String, Marker> _markers = {};
   bool value = false;
+  bool status = false;
 
   get actions => null;
   Future<void> _showMyDialog() async {
@@ -119,37 +133,54 @@ class _MyAppState extends State<MyApp> {
                       value = value;
                     });
                   },
-
-                  //Text('Would you like to approve of this message?'),
-                  //],*******
-                  // actions: <Widget>[
-                  //   TextButton(
-                  //     child: const Text('Filtrele'),
-                  //     onPressed: () {
-                  //       Navigator.pop(context);
-                  //       //Navigator.of(context).pop();
-                  //     },
-                  //   ),
-                  // ],
                 ),
+                //Text('Would you like to approve of this message?'),
+                //],*******
+
+                // children: <Widget>[
+                //       Text(
+                //         username,
+                //         textAlign: TextAlign.center,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 24,
+                //         ),
+                //       ),
+                Expanded(child: Text("    Boş Otoparklar")),
+
+                /// telefona göre
+                Expanded(child: Text("")),
+
+                /// telefona göre
+
                 FlutterSwitch(
-                  width: 125.0,
-                  height: 55.0,
-                  valueFontSize: 25.0,
-                  toggleSize: 45.0,
-                  value: false,
+                  activeColor: Colors.green,
+                  width: 75.0, //55.0
+                  height: 35.0, //25.0
+                  valueFontSize: 12.0, //12.0
+                  toggleSize: 18.0, //18
+                  value: true,
                   borderRadius: 30.0,
                   padding: 8.0,
                   showOnOff: true,
-                  //onToggle: (val) {
-                  //setState(() {
-                  //  status = val;
-                  // });
-                  //},
+                  onToggle: (val) {
+                    setState(() {
+                      status = val;
+                    });
+                  },
                 ),
               ],
             ),
           ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Filtrele'),
+              onPressed: () {
+                Navigator.pop(context);
+                //Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
@@ -169,13 +200,18 @@ class _MyAppState extends State<MyApp> {
   //     },
   //   );
   // }
+  BitmapDescriptor myIcon;
 
   void _setMarker() async {
     final position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final Uint8List markerIcon =
+        await getBytesFromAsset('assets/images/my_icon.png', 100);
+    myIcon = BitmapDescriptor.fromBytes(markerIcon);
     setState(() {
       final marker = Marker(
         markerId: MarkerId("Limon Otopark"),
+        icon: myIcon,
         position: LatLng(position.latitude, position.longitude),
         infoWindow: InfoWindow(
           title: "Limon Otopark",
@@ -213,6 +249,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _getCurrentLocation();
     super.initState();
+
+    // BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(888, 888)),
+    //         'assets/images/my_icon.png')
+    //     .then((onValue) async {
+    //   myIcon = onValue;
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
@@ -345,10 +386,10 @@ class _MyAppState extends State<MyApp> {
                   );
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.directions_car_outlined),
-                title: Text('Otopark Listesi'),
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.directions_car_outlined),
+              //   title: Text('Otopark Listesi'),
+              // ),
               ListTile(
                 leading: Icon(Icons.trending_up_outlined),
                 title: Text('Seviye'),
@@ -944,11 +985,11 @@ class Anasayfa extends StatelessWidget {
                           fontSize: 24,
                         ),
                       ),
-                      Image.asset(
-                        "assets/images/pp.jpg",
-                        height: 100,
-                        width: 100,
-                      ),
+                      // Image.asset(
+                      //   "assets/images/pp.jpg",
+                      //   height: 100,
+                      //   width: 100,
+                      // ),
                     ],
                   )
 
@@ -977,10 +1018,10 @@ class Anasayfa extends StatelessWidget {
                   );
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.directions_car_outlined),
-                title: Text('Otopark Listesi'),
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.directions_car_outlined),
+              //   title: Text('Otopark Listesi'),
+              // ),
               ListTile(
                 leading: Icon(Icons.trending_up_outlined),
                 title: Text('Seviye'),
@@ -1045,11 +1086,11 @@ class Ayarlar extends StatelessWidget {
                         fontSize: 24,
                       ),
                     ),
-                    Image.asset(
-                      "assets/images/pp.jpg",
-                      height: 100,
-                      width: 100,
-                    ),
+                    // Image.asset(
+                    //   "assets/images/pp.jpg",
+                    //   height: 100,
+                    //   width: 100,
+                    // ),
                   ],
                 )
 
@@ -1078,10 +1119,10 @@ class Ayarlar extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              leading: Icon(Icons.directions_car_outlined),
-              title: Text('Otopark Listesi'),
-            ),
+            // ListTile(
+            //   leading: Icon(Icons.directions_car_outlined),
+            //   title: Text('Otopark Listesi'),
+            // ),
             ListTile(
               leading: Icon(Icons.trending_up_outlined),
               title: Text('Seviye'),
