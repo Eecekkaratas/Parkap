@@ -60,7 +60,10 @@ flutter:
     - assets/images/pp.jpg
     - assets/images/btn_google_light_focus_xxxhdpi.9.png
     - assets/images/my_icon.png
-
+    - assets/images/blue.png
+    - assets/images/red.png
+    - assets/images/green.png
+    - assets/images/orange.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

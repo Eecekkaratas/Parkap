@@ -9,10 +9,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -29,6 +27,18 @@ Future<Uint8List> getBytesFromAsset(String path, int width) async {
 }
 
 void main() async {
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Container(
+      color: Colors.green,
+      child: Text(
+        details.toString(),
+        style: TextStyle(
+          fontSize: 15.0,
+          color: Colors.white,
+        ),
+      ),
+    );
+  };
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(ParkApp());
@@ -261,7 +271,7 @@ class _MyAppState extends State<MyApp> {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _markers.clear();
-      FirebaseFirestore.instance.collection("parks").get().then((value) {
+      FirebaseFirestore.instance.collection("parks").get().then((value) async {
         print("BAK");
 
         final allData = value.docs.map((doc) => doc.data()).toList();
@@ -269,13 +279,23 @@ class _MyAppState extends State<MyApp> {
         for (var data in allData) {
           var uid = uuid.v1();
           print(uid);
+          if (data["d"] == "0") {
+            final Uint8List markerIcon =
+                await getBytesFromAsset('assets/images/blue.png', 200);
+            myIcon = BitmapDescriptor.fromBytes(markerIcon);
+          } else {
+            final Uint8List markerIcon =
+                await getBytesFromAsset('assets/images/orange.png', 200);
+            myIcon = BitmapDescriptor.fromBytes(markerIcon);
+          }
           _markers[uid] = Marker(
             markerId: MarkerId(uid),
+            icon: myIcon,
             position:
                 LatLng(double.parse(data["lat"]), double.parse(data["long"])),
             infoWindow: InfoWindow(
-              title: "Limon Otopark",
-              snippet: "Sa",
+              title: data["title"],
+              snippet: data["snippet"],
             ),
           );
         }
@@ -438,12 +458,24 @@ class ParkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-          canvasColor: Colors.white,
-        ),
-        home: Authentication());
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        canvasColor: Colors.white,
+      ),
+      home: Authentication(),
+      builder: (BuildContext context, Widget widget) {
+        Widget error = Text(
+          'Lütfen GPS özelliğini açınız...',
+          style: TextStyle(fontSize: 25),
+          textAlign: TextAlign.center,
+        );
+        if (widget is Scaffold || widget is Navigator)
+          error = Scaffold(body: Center(child: error));
+        ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
+        return widget;
+      },
+    );
   }
 }
 
