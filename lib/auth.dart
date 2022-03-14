@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<bool> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: "c@c.com", password: "Gwece82002");
+        .signInWithEmailAndPassword(email: email, password: password);
     return true;
   } catch (e) {
     print(e);

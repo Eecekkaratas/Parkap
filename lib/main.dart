@@ -52,7 +52,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _locationMessage = "";
   LatLng _pos;
-  var username = "adam ol";
+  var username = "Onur Sertgil";
   var uuid = Uuid();
   final Map<String, Marker> _markers = {};
   bool value = false;
@@ -288,6 +288,7 @@ class _MyAppState extends State<MyApp> {
                 await getBytesFromAsset('assets/images/orange.png', 200);
             myIcon = BitmapDescriptor.fromBytes(markerIcon);
           }
+          String snip = data["snippet"].replaceAll('*', '\n');
           _markers[uid] = Marker(
             markerId: MarkerId(uid),
             icon: myIcon,
@@ -295,7 +296,7 @@ class _MyAppState extends State<MyApp> {
                 LatLng(double.parse(data["lat"]), double.parse(data["long"])),
             infoWindow: InfoWindow(
               title: data["title"],
-              snippet: data["snippet"],
+              snippet: snip,
             ),
           );
         }
@@ -308,9 +309,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Maps '),
+          title: Text('Haritalar'),
           backgroundColor: Colors.red[700],
         ),
         floatingActionButton: Row(
@@ -359,43 +361,49 @@ class _MyAppState extends State<MyApp> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        username,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                      Image.asset(
-                        "assets/images/pp.jpg",
-                        height: 100,
-                        width: 100,
-                      ),
-                    ],
-                  )
+              Container(
+                height: 100.0,
+                child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              username,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            )),
 
-                  // Text(
-                  //   'Onur Sertgil',
-                  //   textAlign: TextAlign.center,
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 24,
-                  //   ),
-                  // ),
+                        // Image.asset(
+                        //   "assets/images/pp.jpg",
+                        //   height: 100,
+                        //   width: 100,
+                        // ),
+                      ],
+                    )
 
-                  // child: Image.asset(
-                  //   "assets/images/pp.jpg",
-                  //   height: 130,
-                  //   width: 130,
-                  // ),
-                  ),
+                    // Text(
+                    //   'Onur Sertgil',
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: 24,
+                    //   ),
+                    // ),
+
+                    // child: Image.asset(
+                    //   "assets/images/pp.jpg",
+                    //   height: 130,
+                    //   width: 130,
+                    // ),
+                    ),
+              ),
               ListTile(
                 leading: Icon(Icons.local_parking_outlined),
                 title: Text('Park Yeri Bul'),
@@ -425,7 +433,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               Padding(
-                padding: EdgeInsets.only(top: 295),
+                padding: EdgeInsets.only(top: 390),
                 child: Text(
                   "",
                   style: new TextStyle(
@@ -435,14 +443,14 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Authentication()),
-                  );
-                },
-                child: Text('Çıkış'),
-              ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Authentication()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(primary: Color(0xff2296f3)),
+                  child: Text('Çıkış')),
             ],
           ),
         ),
@@ -458,6 +466,7 @@ class ParkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.red,
@@ -977,46 +986,51 @@ class Anasayfa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Ana Sayfa"),
-        ),
-        body: Center(
-            child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 25, top: 255),
-              child: ElevatedButton(
-                //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Authentication()),
-                  );
-                },
-                child: const Text('HARİTA EKLENECEK'),
-              ),
+      appBar: AppBar(
+        title: Text("Ana Sayfa"),
+      ),
+      body: Center(
+          child: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 25, top: 255),
+            child: ElevatedButton(
+              //style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Authentication()),
+                );
+              },
+              child: const Text('HARİTA EKLENECEK'),
             ),
-          ],
-        )),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
+          ),
+        ],
+      )),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 100.0,
+              child: DrawerHeader(
                   decoration: BoxDecoration(
                     color: Colors.red,
                   ),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        'Onur Sertgil',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Onur Sertgil",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          )),
+
                       // Image.asset(
                       //   "assets/images/pp.jpg",
                       //   height: 100,
@@ -1040,107 +1054,7 @@ class Anasayfa extends StatelessWidget {
                   //   width: 130,
                   // ),
                   ),
-              ListTile(
-                leading: Icon(Icons.local_parking_outlined),
-                title: Text('Park Yeri Bul'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
-                },
-              ),
-              // ListTile(
-              //   leading: Icon(Icons.directions_car_outlined),
-              //   title: Text('Otopark Listesi'),
-              // ),
-              ListTile(
-                leading: Icon(Icons.trending_up_outlined),
-                title: Text('Seviye'),
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Ayarlar'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Ayarlar()),
-                  );
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 255),
-                child: Text(
-                  "",
-                  style: new TextStyle(
-                    fontSize: 30.0,
-                    //color: Colors.yellow,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Authentication()),
-                  );
-                },
-                child: Text('Çıkış'),
-              ),
-            ],
-          ),
-        ));
-  }
-}
-
-class Ayarlar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Ayarlar'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Onur Sertgil',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                    // Image.asset(
-                    //   "assets/images/pp.jpg",
-                    //   height: 100,
-                    //   width: 100,
-                    // ),
-                  ],
-                )
-
-                // Text(
-                //   'Onur Sertgil',
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: 24,
-                //   ),
-                // ),
-
-                // child: Image.asset(
-                //   "assets/images/pp.jpg",
-                //   height: 130,
-                //   width: 130,
-                // ),
-                ),
+            ),
             ListTile(
               leading: Icon(Icons.local_parking_outlined),
               title: Text('Park Yeri Bul'),
@@ -1170,7 +1084,7 @@ class Ayarlar extends StatelessWidget {
               },
             ),
             Padding(
-              padding: EdgeInsets.only(top: 295),
+              padding: EdgeInsets.only(top: 390),
               child: Text(
                 "",
                 style: new TextStyle(
@@ -1186,6 +1100,116 @@ class Ayarlar extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => Authentication()),
                 );
               },
+              style: ElevatedButton.styleFrom(primary: Color(0xff2296f3)),
+              child: Text('Çıkış'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Ayarlar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Ayarlar'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 100.0,
+              child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Onur Sertgil",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          )),
+
+                      // Image.asset(
+                      //   "assets/images/pp.jpg",
+                      //   height: 100,
+                      //   width: 100,
+                      // ),
+                    ],
+                  )
+
+                  // Text(
+                  //   'Onur Sertgil',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     color: Colors.white,
+                  //     fontSize: 24,
+                  //   ),
+                  // ),
+
+                  // child: Image.asset(
+                  //   "assets/images/pp.jpg",
+                  //   height: 130,
+                  //   width: 130,
+                  // ),
+                  ),
+            ),
+            ListTile(
+              leading: Icon(Icons.local_parking_outlined),
+              title: Text('Park Yeri Bul'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                );
+              },
+            ),
+            // ListTile(
+            //   leading: Icon(Icons.directions_car_outlined),
+            //   title: Text('Otopark Listesi'),
+            // ),
+            ListTile(
+              leading: Icon(Icons.trending_up_outlined),
+              title: Text('Seviye'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Ayarlar'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Ayarlar()),
+                );
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 390),
+              child: Text(
+                "",
+                style: new TextStyle(
+                  fontSize: 30.0,
+                  //color: Colors.yellow,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Authentication()),
+                );
+              },
+              style: ElevatedButton.styleFrom(primary: Color(0xff2296f3)),
               child: Text('Çıkış'),
             ),
           ],
@@ -1508,3 +1532,4 @@ class _MyPageState extends State<MyPage> {
     });
   }
 }
+//2022
